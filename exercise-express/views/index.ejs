@@ -1,0 +1,20 @@
+<%- include("layout", { title: "Home", body: `
+  <form action="/books" method="POST" class="bg-white p-4 rounded shadow mb-6">
+    <h2 class="text-xl font-semibold mb-2">Add Book</h2>
+    <input name="title" placeholder="Title" class="border p-2 w-full mb-2 rounded">
+    <input name="author" placeholder="Author" class="border p-2 w-full mb-2 rounded">
+    <input type="date" name="publishedDate" class="border p-2 w-full mb-2 rounded">
+    <button class="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
+  </form>
+
+  <div>
+    <h2 class="text-xl font-semibold mb-2">Book List</h2>
+    <ul class="space-y-2">
+      ${books.map(b => `
+        <li class="bg-white p-3 shadow rounded">
+          <strong>${b.title}</strong> — ${b.author}
+        </li>
+      `).join("")}
+    </ul>
+  </div>
+` }) %>

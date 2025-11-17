@@ -1,44 +1,42 @@
 const express = require("express");
-const connectDB = require("./config/db");
+const path = require("path");
 const bcrypt = require("bcrypt");
-
-const booksRouter = require("./books");
-const usersRouter = require("./users");
+const connectDB = require("./config/db");
+const Book = require("./models/book");
 const User = require("./models/user");
 
 const app = express();
 const port = 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Connexion à MongoDB
 connectDB();
 
-app.use(
-  "/books",
-  async (req, res, next) => {
-    // middleware d'authentification
-    const b64auth = (req.headers.authorization || "").split(" ")[1] || "";
-    //recupération des identifiants from session
-    const [loginDecoded, passwordDecoded] = Buffer.from(b64auth, "base64")
-      .toString()
-      .split(":");
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
 
-    const auth = await User.findOne({ username: loginDecoded });
-
-    if (auth && (await bcrypt.compare(passwordDecoded, auth.password))) {
-      return next();
-    }
-
-    res.send("Unauthorized");
-    return res.status(401).end();
-  },
-  booksRouter
-);
-
-app.use("/users", usersRouter);
-
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// Home page
+app.get("/", async (req, res) => {
+  const books = await Book.find();
+  res.render("index", { books });
 });
+
+// Register form
+app.get("/register", (req, res) => res.render("register"));
+
+// Handle registration
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+  await new User({ username, password: hashed }).save();
+  res.redirect("/");
+});
+
+// Add book
+app.post("/books", async (req, res) => {
+  const { title, author, publishedDate } = req.body;
+  await new Book({ title, author, publishedDate }).save();
+  res.redirect("/");
+});
+
+app.listen(port, () => console.log(`Server running at http://localhost:${port}`));

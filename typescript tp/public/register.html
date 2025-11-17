@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register Book</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <a href="/">Register</a>
+      <a href="/tracking">Tracking</a>
+    </div>
+
+    <h1>Register a New Book</h1>
+
+    <form id="bookForm" class="form-box">
+      <label>
+        Title
+        <input id="title" name="title" required />
+      </label>
+
+      <label>
+        Author
+        <input id="author" name="author" required />
+      </label>
+
+      <label>
+        Number of pages
+        <input id="numberOfPages" name="numberOfPages" type="number" min="1" required />
+      </label>
+
+      <label>
+        Status
+        <select id="status" name="status">
+          <option>Read</option>
+          <option>Re-read</option>
+          <option>DNF</option>
+          <option>Currently reading</option>
+          <option>Returned Unread</option>
+          <option>Want to read</option>
+        </select>
+      </label>
+
+      <label>
+        Price
+        <input id="price" name="price" type="number" step="0.01" min="0" required />
+      </label>
+
+      <label>
+        Pages read
+        <input id="pagesRead" name="pagesRead" type="number" min="0" value="0" />
+      </label>
+
+      <label>
+        Format
+        <select id="format" name="format">
+          <option>Print</option>
+          <option>PDF</option>
+          <option>Ebook</option>
+          <option>AudioBook</option>
+        </select>
+      </label>
+
+      <label>
+        Suggested by
+        <input id="suggestedBy" name="suggestedBy" />
+      </label>
+
+      <button type="submit">Add Book</button>
+    </form>
+  </div>
+
+  <script src="register.js"></script>
+</body>
+</html>
